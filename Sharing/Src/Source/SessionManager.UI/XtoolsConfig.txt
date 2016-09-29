@@ -1,4 +1,4 @@
-ServerAddress OSSERVER
+ServerAddress localhost
 
 # Used for testing
 UserNameOverride TestUser

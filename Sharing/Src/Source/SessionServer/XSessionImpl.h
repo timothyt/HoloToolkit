@@ -44,6 +44,7 @@ public:
 	// Returns false if the session was unable to initialize itself correctly
 	bool IsInitialized() const;
 
+	void SendDebugControlMessageToAllClients(bool bDebugOn);
 private:
 	// NetworkConnectionListener Functions:
 	virtual void OnDisconnected(const NetworkConnectionPtr& connection) XTOVERRIDE;

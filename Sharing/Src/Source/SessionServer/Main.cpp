@@ -41,6 +41,7 @@
 // Track memory allocations
 //XT_TRACK_MEMORY
 
+bool bClientDebug = false;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -69,7 +70,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 		else if (_wcsicmp(L"local", argv[1] + 1) == 0)
 		{
-			wprintf(L"Running Sharing Service locally.  Enter 'q' to quit.  \n");
+			wprintf(L"Running Sharing Service locally.  Enter 'q' to quit. 'o' to turn on client debug. 'x' to turn off client debug \n");
 
 			XTools::SessionServer server(SERVICE_NAME);
 			server.OnStart(0, NULL);
@@ -78,6 +79,14 @@ int _tmain(int argc, _TCHAR* argv[])
 			while (input != 'q')
 			{
 				std::cin >> input;
+				if (input == 'o')
+				{
+					server.SendDebugControlMessageToAllClients(true);
+				}
+				else if (input == 'x')
+				{
+					server.SendDebugControlMessageToAllClients(false);
+				}
 			}
 
 			server.OnStop();

@@ -39,6 +39,7 @@ public:
 	virtual void OnDisconnected(const NetworkConnectionPtr& connection) XTOVERRIDE;
 	virtual void OnMessageReceived(const NetworkConnectionPtr& connection, NetworkInMessage& message) XTOVERRIDE;
 
+	void SendDebugControlMessageToAllClients(bool bDebugOn);
 private:
 	// SessionChangeCallback Functions:
     virtual void OnUserJoinedSession(uint32 sessionID, const std::string& userName, UserID userID, bool muteState) XTOVERRIDE;

@@ -412,6 +412,21 @@ void SessionServer::SendSessionMessageToAllClients(const std::string& message)
 	m_messagePool->ReturnMessage(msg);
 }
 
+void SessionServer::SendDebugControlMessageToAllClients(bool bDebugOn)
+{
+	ScopedLock lock(m_mutex);
+	NetworkOutMessagePtr msg = m_messagePool->AcquireMessage();
+	msg->Write((byte)254); // Picking something from end of range so don't overlap with rest of user generated codes
+	msg->Write((byte)bDebugOn);
+
+	for (size_t i = 0; i < m_sessions.size(); ++i)
+	{
+		XSessionImplPtr session = m_sessions[i];
+		session->SendDebugControlMessageToAllClients(bDebugOn);
+	}
+
+	m_messagePool->ReturnMessage(msg);
+}
 
 // The entry point for the main thread of the session server
 void SessionServer::ServerThreadFunc()

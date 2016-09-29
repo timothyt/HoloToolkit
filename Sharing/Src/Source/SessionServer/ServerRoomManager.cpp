@@ -94,8 +94,10 @@ void ServerRoomManager::OnElementAdded(const ElementPtr& element)
 {
 	ServerRoomPtr newRoom = new ServerRoom(this);
 	newRoom->BindRemote(element);
-
+	
 	m_rooms[newRoom->GetID()] = newRoom;
+
+	LogInfo("ServerRoomManager::OnElementAdded Added Room %s room id %I64d", newRoom->GetName()->GetString(), newRoom->GetID());
 }
 
 
@@ -105,6 +107,7 @@ void ServerRoomManager::OnElementDeleted(const ElementPtr& element)
 	{
 		if (itr->second->GetGUID() == element->GetGUID())
 		{
+			LogInfo("ServerRoomManager::OnElementAdded Removing Room %s room id %I64d", itr->second->GetName()->GetString(), itr->second->GetID());
 			m_rooms.erase(itr);
 			break;
 		}
@@ -158,6 +161,8 @@ void ServerRoomManager::OnUploadRequest(const NetworkConnectionPtr& connection, 
 	// Send a response to the sender that the upload was successful
 	SendUploadResponse(connection, true);
 
+	LogInfo("ServerRoomManager::OnUploadRequest anchor %s uploaded from %s for room id %I64d", anchorName->GetString(), connection->GetRemoteAddress()->GetString(), roomID);
+
 	// Send a message to all other connections to let them know the anchor has changed
 	{
 		NetworkOutMessagePtr outMsg = connection->CreateMessage(MessageID::RoomAnchor);
@@ -203,6 +208,7 @@ void ServerRoomManager::OnDownloadRequest(const NetworkConnectionPtr& connection
 		return;
 	}
 
+	LogInfo("ServerRoomManager::OnDownloadRequest anchor %s downloading to %s for room id %I64d", anchorName->GetString(), connection->GetRemoteAddress()->GetString(), roomID);
 	SendDownloadResponse(connection, true, anchorBuffer);
 }
 
@@ -241,7 +247,6 @@ void ServerRoomManager::SendDownloadResponse(const NetworkConnectionPtr& connect
 	{
 		outMsg->Write(failureReason);
 	}
-
 	connection->Send(outMsg, MessagePriority::Low, MessageReliability::ReliableOrdered, MessageChannel::RoomAnchorChannel, true);
 }
 

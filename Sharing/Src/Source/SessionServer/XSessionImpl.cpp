@@ -497,5 +497,19 @@ void XSessionImpl::CheckIfEmpty(bool resetImmediately)
 	}
 }
 
+void XSessionImpl::SendDebugControlMessageToAllClients(bool bDebugOn)
+{
+	NetworkOutMessagePtr msg = m_messagePool->AcquireMessage();
+	msg->Write((byte)254); // Picking something from end of range so don't overlap with rest of user generated codes
+	msg->Write((byte)254); // Picking something from end of range so don't overlap with rest of user generated codes
+	msg->Write((byte)bDebugOn);
+
+	for (size_t i = 0; i < m_clients.size(); ++i)
+	{
+		m_clients[i]->m_primaryConnection->Send(msg, MessagePriority::Immediate, MessageReliability::Reliable, MessageChannel::Default, false);
+	}
+
+	m_messagePool->ReturnMessage(msg);
+}
 
 XTOOLS_NAMESPACE_END
