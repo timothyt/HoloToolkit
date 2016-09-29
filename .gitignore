@@ -53,6 +53,5 @@ Sharing/Src/Solutions/Xcode/XToolsClient/build
 /SpatialMapping/PlaneFinding/Tests/TestHelpers/obj
 /SpatialMapping/PlaneFinding/Tests/UnitTests/bin
 /SpatialMapping/PlaneFinding/Tests/UnitTests/obj
-Sharing/Src/Projects/SessionManagerUniversal.UI/obj/
-Sharing/Src/Solutions/VisualStudio/packages/
-Sharing/Src/Projects/SessionManagerUniversal.UI/AppPackages/
+*.cache
+*.config
